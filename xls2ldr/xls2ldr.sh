@@ -53,9 +53,9 @@ function parse_excel() {
     local sheet_no=$1
     TABLE_NAME=$2
 
-    HEADER_FILE="${TABLE_NAME}.header"
-    DAT_FILE="${TABLE_NAME}.dat"
-    CTL_FILE="${TABLE_NAME}.ctl"
+    HEADER_FILE="${OUTDIR:-.}/${TABLE_NAME}.header"
+    DAT_FILE="${OUTDIR:-.}/${TABLE_NAME}.dat"
+    CTL_FILE="${OUTDIR:-.}/${TABLE_NAME}.ctl"
 
     create_dat_file $sheet_no
     create_ctl_file
@@ -67,9 +67,20 @@ if [ $# == 0 ] ; then
     exit 1
 fi
 
+while getopts o: opt $@ ; do
+    case "$opt" in
+        "o") OUTDIR=$OPTARG;;
+        *) break;;
+    esac
+done
+
+shift $((OPTIND-1))
+
+echo $@
 for f in $@ ; do
     EXCEL_FILE=$f
     xlhtml -asc -dp $EXCEL_FILE \
         | perl -ne 'print "$1 $2\n" if /^Page:(\d+) Name:(\w+)/' \
         | while read line; do eval parse_excel $line; done
 done
+
