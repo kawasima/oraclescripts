@@ -25,6 +25,7 @@ function create_ctl_file() {
 
     cat <<EOF > $CTL_FILE
 LOAD DATA
+LENGTH SEMANTICS CHAR
 INFILE '${table}.dat'
 TRUNCATE
 INTO TABLE ${table}
