@@ -40,7 +40,7 @@ EOF
 function create_dat_file() {
     local sheet_no=$1
     local i=0
-    xlhtml -csv -xp:$sheet_no $EXCEL_FILE | while read line; do
+    xlhtml -csv -xp:$sheet_no $EXCEL_FILE | perl -pe 's/&amp;/&/g' | while read line; do
         if [ $i -eq 0 ] ; then
             echo $line> $HEADER_FILE
         elif [ "$line" != "" ] ; then
