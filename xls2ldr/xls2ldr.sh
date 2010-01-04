@@ -10,6 +10,8 @@ function field_list() {
             printf " \"TO_DATE(:%s, 'YYYY/MM/DD HH24:MI:SS')\" " $f
         elif [[ $f == *_DATE ]] ; then
             printf " \"TO_DATE(:%s, 'YYYY/MM/DD')\" " $f
+        else
+            printf " VARCHAR2"
         fi
         if [ $i -lt $(($# - 1)) ] ; then
             printf ","
